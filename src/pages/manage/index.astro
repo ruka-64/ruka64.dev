@@ -1,0 +1,43 @@
+---
+import DateFormatter from "../../components/DateFormatter.astro";
+import { BasicAuth } from "../../func/auth";
+import Layout from "../../layouts/Layout.astro";
+import type { ArticleList } from "../../types/R2";
+
+const authorization = Astro.request.headers.get("authorization");
+const { AUTH_USER, AUTH_PASS, API_ENDPOINT } = Astro.locals.runtime.env;
+const auth = BasicAuth(Astro.request.headers, AUTH_USER, AUTH_PASS);
+if (!auth) {
+	Astro.response.status = 401;
+	Astro.response.headers.set("WWW-Authenticate", 'Basic realm="realm"');
+	Astro.response.headers.set("Content-Length", "0");
+} else {
+	Astro.response.status = 200;
+	Astro.response.headers.delete("WWW-Authenticate");
+	Astro.response.headers.delete("Content-Length");
+}
+
+const res = (await (await fetch(API_ENDPOINT + "/articles/")).json()) as ArticleList;
+
+const posts = res.data.sort((a, b) => b.uploaded.valueOf() - a.uploaded.valueOf());
+---
+
+<Layout title="Article Manager" description="Hello, I'm ruka64(るか)。">
+	<div class="flex flex-col items-center">
+		<ul class="flex flex-col list-none m-0 mt-8 p-0 sm:w-[50rem] w-full">
+			{
+				posts.map((post) => (
+					<li class="m-2 p-4 border-2 border-gray-800 rounded-xl">
+						<a href={`/manage/${post.id}`} class="no-href-color">
+							<p class="text-3xl">{post.title}</p>
+							<p>{post.description}</p>
+							<p class="text-gray-400">
+								Published: <DateFormatter date={new Date(post.uploaded)} />
+							</p>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</Layout>

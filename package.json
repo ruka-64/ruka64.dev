@@ -1,0 +1,38 @@
+{
+  "name": "ruka64.dev-v2",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "wrangler types && astro dev",
+    "build": "astro build",
+    "preview": "wrangler pages dev ./dist",
+    "check": "wrangler types && astro check",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/cloudflare": "^12.2.1",
+    "@astrojs/react": "^4.2.0",
+    "@tailwindcss/typography": "^0.5.16",
+    "@tailwindcss/vite": "^4.0.3",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "astro": "^5.2.3",
+    "dompurify": "^3.2.4",
+    "easymde": "^2.19.0",
+    "highlight.js": "^11.11.1",
+    "marked": "^15.0.7",
+    "marked-highlight": "^2.2.1",
+    "motion": "^12.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-simplemde-editor": "^5.2.0",
+    "tailwindcss": "^4.0.3",
+    "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "prettier-plugin-astro": "^0.14.1",
+    "shiki": "^3.1.0",
+    "wrangler": "^3.109.2"
+  }
+}

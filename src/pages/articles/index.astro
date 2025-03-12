@@ -1,0 +1,37 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import DateFormatter from "../../components/DateFormatter.astro";
+
+import type { ArticleList } from "../../types/R2";
+
+const { API_ENDPOINT } = Astro.locals.runtime.env;
+
+console.log("ENDPOINT:", API_ENDPOINT);
+
+const res = (await (await fetch(API_ENDPOINT + "/articles/")).json()) as ArticleList;
+
+const posts = res.data
+	.filter((post) => !post.draft)
+	.sort((a, b) => b.uploaded.valueOf() - a.uploaded.valueOf());
+---
+
+<Layout title="ブログ" description="Hello, I'm ruka64(るか)。">
+	<div class="flex flex-col items-center">
+		<ul class="flex flex-col list-none m-0 mt-8 p-0 sm:w-[50rem] w-full">
+			{
+				posts.map((post) => (
+					<li class="m-2 p-4 border-2 border-gray-800 rounded-xl">
+						<a href={`/articles/${post.id}`} class="no-href-color">
+							<p class="text-3xl">{post.title}</p>
+							<p>{post.description}</p>
+							<p class="text-gray-400">
+								Published: <DateFormatter date={new Date(post.uploaded)} />
+							</p>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</Layout>

@@ -1,0 +1,25 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import { render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Articles from "../../layouts/Articles.astro";
+
+import type { GetArticle } from "../../types/R2";
+
+const { API_ENDPOINT } = Astro.locals.runtime.env;
+console.log("Path: ", Astro.params.slug);
+
+const res = await fetch(API_ENDPOINT + `/articles/${Astro.params.slug}`);
+if (!res.ok) {
+	return Astro.redirect("/404");
+}
+const post = ((await res.json()) as GetArticle).data;
+
+const updatedDate = post.updatedAt ? new Date(Number(post.updatedAt)) : null;
+---
+
+<Layout title={post.title} description={post.description}>
+	<Articles title={post.title} pubDate={new Date(Number(post.createdAt))} updatedDate={updatedDate}>
+		<div set:html={post.content} />
+	</Articles>
+</Layout>

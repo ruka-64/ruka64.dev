@@ -1,0 +1,78 @@
+@import "tailwindcss";
+@plugin '@tailwindcss/typography';
+
+@layer components {
+	:root {
+		--accent: #2337ff;
+		--accent-dark: #000d8a;
+		--black: 15, 18, 25;
+		--gray: 96, 115, 159;
+		--gray-light: 229, 233, 240;
+		--gray-dark: 34, 41, 57;
+		--box-shadow:
+			0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
+			0 16px 32px rgba(var(--gray), 33%);
+	}
+
+	.no-href-color {
+		color: white;
+		transition: none;
+	}
+}
+
+@layer base {
+	h1 {
+		font-weight: var(--font-weight-bold);
+		font-size: var(--text-3xl);
+	}
+	h2 {
+		font-weight: var(--font-weight-bold);
+		font-size: var(--text-2xl);
+	}
+	h3 {
+		font-weight: var(--font-weight-bold);
+		font-size: var(--text-xl);
+	}
+	h4 {
+		font-weight: var(--font-weight-bold);
+		font-size: 1rem;
+	}
+	img {
+		border-radius: var(--radius-xl);
+		margin: 0;
+	}
+	a {
+		color: #32c5ff;
+		transition: color 0.25s ease;
+	}
+	a:hover {
+		color: #7fdbff;
+	}
+
+	code {
+		display: block;
+		padding: 2px 5px;
+		border-radius: 2px;
+		overflow-x: auto;
+		height: 100%;
+		width: 100%;
+	}
+	pre {
+		padding: 1.5em;
+		border-radius: 8px;
+	}
+	blockquote {
+		border-left: 4px solid #333333;
+		color: #808080;
+		padding: 0 0 0 20px;
+		margin: 0px;
+	}
+
+	hr {
+		border-color: #464646;
+		margin-top: 0.75em;
+		margin-bottom: 0.75em;
+		/* border: none; */
+		/* border-top: 1px solid #464646; */
+	}
+}

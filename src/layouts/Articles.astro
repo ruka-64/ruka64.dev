@@ -1,0 +1,96 @@
+---
+import type { CollectionEntry } from "astro:content";
+import DateFormatter from "../components/DateFormatter.astro";
+
+interface Props {
+	title: string;
+	pubDate: Date;
+	updatedDate: Date | null;
+}
+
+const { title, pubDate, updatedDate } = Astro.props;
+---
+
+<article class="flex flex-col items-center mt-8">
+	<div class="sm:w-[50rem] w-full border p-4 border-gray-400 rounded-2xl">
+		<div>
+			<h1 class="text-3xl font-bold mb-2">{title}</h1>
+			<div>
+				<DateFormatter date={pubDate} />
+				{
+					updatedDate && (
+						<div>
+							Updated at <DateFormatter date={updatedDate} />
+						</div>
+					)
+				}
+			</div>
+			<hr class="mt-4 mb-4" />
+		</div>
+		<div
+			class:list={[
+				"prose-h1:font-bold",
+				"prose-h2:font-bold",
+				"prose-h3:font-bold",
+				"prose-h4:font-bold",
+				"prose-h1:text-3xl",
+				"prose-h2:text-2xl",
+				"prose-h3:text-xl",
+				"prose-h4:text-[1rem]",
+				"prose-img:rounded-xl",
+				"prose-img-m-0",
+				"prose-pre:mt-3",
+				"prose-pre:mb-3",
+				"prose-h1:mt-3",
+				"prose-h1:mb-3",
+				"prose-h2:mt-3",
+				"prose-h2:mb-3",
+				"prose-h3:mt-3",
+				"prose-h3:mb-3",
+				"prose-h4:mt-3",
+				"prose-h4:mb-3",
+				"prose-p:mt-2",
+				"prose-p:mb-2",
+				"prose-a:mt-2",
+				"prose-a:mb-2",
+				"prose-ul:list-disc",
+				"prose-ul:ml-4",
+			]}
+		>
+			<slot />
+		</div>
+	</div>
+</article>
+
+<script>
+	import { createHighlighter } from "shiki/bundle/web";
+	async function highlighter() {
+		const codeBlocks = document.querySelectorAll("code");
+		const highlighter = await createHighlighter({
+			themes: ["dracula"],
+			langs: ["bash", "html", "css", "js", "ts", "yml"],
+			// langs: Object.keys(bundledLanguages),
+		});
+		codeBlocks.forEach(async (codeBlock) => {
+			const code = codeBlock.textContent;
+			const parent = codeBlock.parentElement?.closest("pre");
+			if (!code) return;
+			if (!codeBlock.className.split("-")[1]) return;
+
+			if (parent) {
+				parent.outerHTML = highlighter.codeToHtml(code, {
+					theme: "dracula",
+					lang: codeBlock.className.split("-")[1],
+				});
+			} else {
+				const wrapper = document.createElement("pre");
+				wrapper.outerHTML = highlighter.codeToHtml(code, {
+					theme: "dracula",
+					lang: codeBlock.className.split("-")[1],
+				});
+				codeBlock.replaceWith(wrapper);
+			}
+		});
+	}
+	highlighter();
+</script>
